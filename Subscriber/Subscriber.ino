@@ -48,9 +48,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   // Liga o led caso o topico receba 1
   if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);   
+    digitalWrite(BUILTIN_LED, HIGH);   
   } else {
-    digitalWrite(BUILTIN_LED, HIGH);  // Desliga o led
+    digitalWrite(BUILTIN_LED, LOW);  // Desliga o led
   }
 
 }
