@@ -2,8 +2,8 @@
 
 sMQTTBroker broker;
 
-IPAddress local_IP(192, 168, 75, 218); //Defina o IP de acordo com a sua rede
-IPAddress gateway(192, 168, 75, 254);
+IPAddress local_IP(xxx, xxx, xxx, xxx); //Defina o IP de acordo com a sua rede
+IPAddress gateway(xxx, xxx, xxx, xxx);
 IPAddress subnet(255, 255, 0, 0);
 
 void setup()
@@ -14,11 +14,11 @@ void setup()
    Serial.println("STA Failed to configure");
  }
 
-const char* ssid = "Galaxy A22 41FF";         // The SSID (name) of the Wi-Fi network you want to connect
-const char* password = "123123123"; // The password of the Wi-Fi network
+const char* ssid = ""; // O SSID (nome) da rede wifi que você quer conectar
+const char* password = ""; // A senha da rede escolhida
  
 WiFi.begin(ssid, password);
- while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
+ while (WiFi.status() != WL_CONNECTED) { // Espere a internet conectar
    delay(1000);
  }
  Serial.println("Connection established!");
@@ -27,7 +27,7 @@ WiFi.begin(ssid, password);
 
  const unsigned short mqttPort = 1883;
  broker.init(mqttPort);
- // all done
+ // feito
 }
 void loop()
 {

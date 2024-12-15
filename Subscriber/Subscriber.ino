@@ -1,12 +1,11 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
-// Update these with values suitable for your network. 
-//  Levy-2G 21032004Ana
+// Dados da sua rede 
 
-const char* ssid = "Galaxy A22 41FF";         // The SSID (name) of the Wi-Fi network you want to connect
-const char* password = "123123123"; // The password of the Wi-Fi network
-const char* mqtt_server = "192.168.75.218";
+const char* ssid = "";
+const char* password = "";
+const char* mqtt_server = "192.168.0.8"; // IP do broker
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -15,10 +14,9 @@ unsigned long lastMsg = 0;
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
 
-void setup_wifi() {
+void setup_wifi() { // Conectando-se a rede
 
   delay(10);
-  // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
@@ -48,43 +46,36 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  // Switch on the LED if an 1 was received as first character
+  // Liga o led caso o topico receba 1
   if ((char)payload[0] == '1') {
-    digitalWrite(16, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is active low on the ESP-01)
+    digitalWrite(BUILTIN_LED, LOW);   
   } else {
-    digitalWrite(16, HIGH);  // Turn the LED off by making the voltage HIGH
+    digitalWrite(BUILTIN_LED, HIGH);  // Desliga o led
   }
 
 }
 
-void reconnect() {
-  // Loop until we're reconnected
+void reconnect() { // Essa função serve para fazer reconectar o subscriber 
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-    // Create a random client ID
+    // Cria um ID aleatorio para o cliente
     String clientId = "ESP8266Client-";
     clientId += String(random(0xffff), HEX);
-    // Attempt to connect
+    // Conectando...
     if (client.connect(clientId.c_str())) {
-      Serial.println("connected");
-      // Once connected, publish an announcement...
-      client.publish("outTopic", "hello world");
-      // ... and resubscribe
       client.subscribe("outTopic");
+      Serial.print("Conected!!!");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
       delay(5000);
     }
   }
 }
 
 void setup() {
-  pinMode(16, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+  pinMode(BUILTIN_LED, OUTPUT);
   Serial.begin(9600);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
